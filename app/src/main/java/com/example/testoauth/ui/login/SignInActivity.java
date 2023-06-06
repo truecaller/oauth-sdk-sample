@@ -32,6 +32,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -83,6 +84,7 @@ public class SignInActivity extends AppCompatActivity {
     private Spinner    ctaTextSpinner, prefixSpinner;
     private Spinner colorSpinner, colorTextSpinner;
     private AppCompatTextView timerTextViewMissedCall;
+    private ProgressBar       progressBar;
     private MaterialCheckBox  phoneCheckbox, profileCheckbox, openIdCheckbox, offlineAccessCheckbox;
     private CountDownTimer           timer;
     private String                   state;
@@ -287,6 +289,7 @@ public class SignInActivity extends AppCompatActivity {
         offlineAccessCheckbox = findViewById(R.id.offline_access_scope);
 
         timerTextViewMissedCall = findViewById(R.id.timerTextProgress);
+        progressBar = findViewById(R.id.progress_bar);
         setSpinnerAdapters();
 
         //        initTruecallerSDK();
@@ -443,6 +446,7 @@ public class SignInActivity extends AppCompatActivity {
     private void showCountDownTimer(Double ttl) {
         if (verificationCallbackType == VerificationCallback.TYPE_MISSED_CALL_INITIATED) {
             timerTextViewMissedCall.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
         }
         timer = new CountDownTimer(ttl.longValue(), 1000) {
             @Override
@@ -458,6 +462,7 @@ public class SignInActivity extends AppCompatActivity {
                 if (verificationCallbackType == VerificationCallback.TYPE_MISSED_CALL_INITIATED) {
                     timerTextViewMissedCall.setPaintFlags(timerTextViewMissedCall.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                     timerTextViewMissedCall.setText(getString(R.string.retry_now));
+                    progressBar.setVisibility(View.GONE);
                     timerTextViewMissedCall.setOnClickListener(v -> {
                         showLayout(FORM_LAYOUT);
                     });

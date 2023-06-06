@@ -43,6 +43,7 @@
     <string name="enter_your_number">Enter your number</string>
     <string name="proceed">Proceed</string>
     <string name="loading">Loading…</string>
+    <string name="oauth_sdk_demo">OAuth SDK Demo</string>
     <string-array name="SdkPartnerLoginPrefixOptionsArray">
         <item>To get started</item>
         <item>To continue</item>
