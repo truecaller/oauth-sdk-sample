@@ -28,6 +28,8 @@
     <string name="phone_number">Phone Number</string>
     <string name="openid">OpenId</string>
     <string name="offline_access">Offline Access</string>
+    <string name="email">Email</string>
+    <string name="address">Address</string>
     <string name="cta_color">cta color</string>
     <string name="cta_text_color">cta text color</string>
     <string name="cta_text">cta text</string>

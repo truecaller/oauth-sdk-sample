@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121E2C">
+    android:paddingBottom="@dimen/dp32">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,6 +42,21 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName" />
 
+        <TextView
+            android:id="@+id/tvOtp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="sans-serif-light"
+            android:text="6 digit OTP Code"/>
+
+        <EditText
+            android:id="@+id/edtOtpCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="6" />
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/timerText"
             android:layout_width="match_parent"
@@ -56,7 +72,7 @@
     <Button
         android:id="@+id/btnVerify"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         android:layout_alignParentBottom="true"
         android:padding="@dimen/com_truecaller_truebutton_padding"
         android:text="Verify" />
