@@ -231,6 +231,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp16"
             android:background="#2196F3"
+            android:textColor="@color/white"
             android:foreground="?selectableItemBackground"
             android:text="@string/let_s_go" />
 

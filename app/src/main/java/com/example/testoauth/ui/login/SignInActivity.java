@@ -308,7 +308,6 @@ public class SignInActivity extends AppCompatActivity {
 
         findViewById(R.id.btnStart).setOnClickListener(startClickListener);
         findViewById(R.id.buttonGo).setOnClickListener(btnGoClickListner);
-        findViewById(R.id.buttonGo).setBackgroundColor(ContextCompat.getColor(this, R.color.white));
         titleSelector = findViewById(R.id.sdkTitleOptions);
         additionalFooterSelector = findViewById(R.id.additionalFooters);
 
