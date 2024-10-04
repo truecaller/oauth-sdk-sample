@@ -32,6 +32,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -83,7 +84,8 @@ public class SignInActivity extends AppCompatActivity {
     private Spinner    ctaTextSpinner, prefixSpinner;
     private Spinner colorSpinner, colorTextSpinner;
     private AppCompatTextView timerTextViewMissedCall;
-    private MaterialCheckBox  phoneCheckbox, profileCheckbox, openIdCheckbox, offlineAccessCheckbox;
+    private ProgressBar       progressBar;
+    private MaterialCheckBox  phoneCheckbox, profileCheckbox, openIdCheckbox, offlineAccessCheckbox, emailCheckbox, addressCheckbox;
     private CountDownTimer           timer;
     private String                   state;
     private RequestPermissionHandler permissionHandler;
@@ -151,6 +153,25 @@ public class SignInActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
                 showLayout(PROFILE_LAYOUT);
                 findViewById(R.id.btnVerify).setOnClickListener(verifyClickListener);
+            } else if (requestCode == VerificationCallback.TYPE_IM_OTP_INITIATED) {
+                verificationCallbackType = VerificationCallback.TYPE_IM_OTP_INITIATED;
+                String ttl = bundle.getString(VerificationDataBundle.KEY_TTL);
+                if (ttl != null) {
+                    Toast.makeText(SignInActivity.this,
+                            "IM OTP initiated with TTL : " + bundle.getString(VerificationDataBundle.KEY_TTL),
+                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignInActivity.this,
+                            "Req Nonce : " + bundle.getString(VerificationDataBundle.KEY_REQUEST_NONCE),
+                            Toast.LENGTH_SHORT).show();
+                    showCountDownTimer(Double.parseDouble(ttl) * 1000);
+                }
+                showLayout(PROFILE_LAYOUT);
+                findViewById(R.id.btnVerify).setOnClickListener(verifyClickListener);
+            } else if (requestCode == VerificationCallback.TYPE_IM_OTP_RECEIVED) {
+                Toast.makeText(SignInActivity.this.getApplicationContext(),
+                        "IM OTP received",
+                        Toast.LENGTH_SHORT).show();
+                fillOtp(bundle.getString(VerificationDataBundle.KEY_OTP));
             } else if (requestCode == VerificationCallback.TYPE_PROFILE_VERIFIED_BEFORE) {
                 Toast.makeText(SignInActivity.this,
                         "Profile verified for your app before: " + bundle.getProfile().firstName
@@ -192,13 +213,19 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     //**********Click listeners  *************//
-    private final View.OnClickListener verifyClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(final View view) {
-            final String firstName = ((EditText) findViewById(R.id.edtFirstName)).getText().toString();
-            final String lastName = ((EditText) findViewById(R.id.edtLastName)).getText().toString();
-            final TrueProfile profile = new TrueProfile.Builder(firstName, lastName).build();
+    private final View.OnClickListener verifyClickListener = view -> {
+        final String firstName = ((EditText) findViewById(R.id.edtFirstName)).getText().toString();
+        final String lastName = ((EditText) findViewById(R.id.edtLastName)).getText().toString();
+        final TrueProfile profile = new TrueProfile.Builder(firstName, lastName).build();
 
+        if (verificationCallbackType == VerificationCallback.TYPE_IM_OTP_INITIATED) {
+            final String otp = ((EditText) findViewById(R.id.edtOtpCode)).getText().toString();
+            if (TextUtils.isEmpty(otp)) {
+                return;
+            }
+            showLoader("Verifying profile...");
+            TcSdk.getInstance().verifyOtp(profile, otp, apiCallback);
+        } else {
             TcSdk.getInstance().verifyMissedCall(profile, apiCallback);
         }
     };
@@ -250,11 +277,19 @@ public class SignInActivity extends AppCompatActivity {
         if (offlineAccessCheckbox.isChecked()) {
             scopes.add(offlineAccessCheckbox.getTag().toString());
         }
+        if (emailCheckbox.isChecked()) {
+            scopes.add(emailCheckbox.getTag().toString());
+        }
+        if (addressCheckbox.isChecked()) {
+            scopes.add(addressCheckbox.getTag().toString());
+        }
         return scopes.toArray(new String[0]);
     }
 
     private final View.OnClickListener proceedClickListener = view -> checkAndRequestPermissions();
     private       EditText             mPhoneField;
+    private       EditText             edtOtp;
+    private       TextView             tvOtp;
 
     @SuppressLint("NewApi")
     private final View.OnClickListener btnGoClickListner = v -> {
@@ -268,10 +303,11 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
         mPhoneField = findViewById(R.id.edtPhone);
+        edtOtp = findViewById(R.id.edtOtpCode);
+        tvOtp = findViewById(R.id.tvOtp);
 
         findViewById(R.id.btnStart).setOnClickListener(startClickListener);
         findViewById(R.id.buttonGo).setOnClickListener(btnGoClickListner);
-        findViewById(R.id.buttonGo).setBackgroundColor(ContextCompat.getColor(this, R.color.white));
         titleSelector = findViewById(R.id.sdkTitleOptions);
         additionalFooterSelector = findViewById(R.id.additionalFooters);
 
@@ -285,8 +321,11 @@ public class SignInActivity extends AppCompatActivity {
         profileCheckbox = findViewById(R.id.profile_scope);
         openIdCheckbox = findViewById(R.id.openId_scope);
         offlineAccessCheckbox = findViewById(R.id.offline_access_scope);
+        emailCheckbox = findViewById(R.id.email_access_scope);
+        addressCheckbox = findViewById(R.id.address_access_scope);
 
         timerTextViewMissedCall = findViewById(R.id.timerTextProgress);
+        progressBar = findViewById(R.id.progress_bar);
         setSpinnerAdapters();
 
         //        initTruecallerSDK();
@@ -380,6 +419,10 @@ public class SignInActivity extends AppCompatActivity {
         return pos;
     }
 
+    private void fillOtp(final String otp) {
+        edtOtp.setText(otp);
+    }
+
     public void requestVerification() {
         final String phone = mPhoneField.getText().toString().trim();
         if (!TextUtils.isEmpty(phone)) {
@@ -443,6 +486,7 @@ public class SignInActivity extends AppCompatActivity {
     private void showCountDownTimer(Double ttl) {
         if (verificationCallbackType == VerificationCallback.TYPE_MISSED_CALL_INITIATED) {
             timerTextViewMissedCall.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
         }
         timer = new CountDownTimer(ttl.longValue(), 1000) {
             @Override
@@ -458,6 +502,7 @@ public class SignInActivity extends AppCompatActivity {
                 if (verificationCallbackType == VerificationCallback.TYPE_MISSED_CALL_INITIATED) {
                     timerTextViewMissedCall.setPaintFlags(timerTextViewMissedCall.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                     timerTextViewMissedCall.setText(getString(R.string.retry_now));
+                    progressBar.setVisibility(View.GONE);
                     timerTextViewMissedCall.setOnClickListener(v -> {
                         showLayout(FORM_LAYOUT);
                     });
@@ -488,6 +533,16 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void showLayout(int id) {
+        if (id == PROFILE_LAYOUT) {
+            if (verificationCallbackType == VerificationCallback.TYPE_MISSED_CALL_INITIATED) {
+                tvOtp.setVisibility(View.GONE);
+                edtOtp.setVisibility(View.GONE);
+            } else {
+                edtOtp.setVisibility(View.VISIBLE);
+                tvOtp.setVisibility(View.VISIBLE);
+            }
+        }
+
         findViewById(R.id.landingLayout).setVisibility(id == LANDING_LAYOUT ? View.VISIBLE : View.GONE);
         findViewById(R.id.profileLayout).setVisibility(id == PROFILE_LAYOUT ? View.VISIBLE : View.GONE);
         findViewById(R.id.loaderLayout).setVisibility(id == LOADER_LAYOUT ? View.VISIBLE : View.GONE);

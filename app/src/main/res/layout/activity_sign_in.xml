@@ -19,7 +19,6 @@ SDK PRODUCT YOU ARE ASSUMING THE ENTIRE RISK AS TO ITS QUALITY AND PERFORMANCE.
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#121E2C"
-    android:paddingBottom="32dp"
     tools:context=".ui.login.SignInActivity">
 
     <include

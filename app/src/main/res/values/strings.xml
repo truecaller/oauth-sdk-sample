@@ -28,6 +28,8 @@
     <string name="phone_number">Phone Number</string>
     <string name="openid">OpenId</string>
     <string name="offline_access">Offline Access</string>
+    <string name="email">Email</string>
+    <string name="address">Address</string>
     <string name="cta_color">cta color</string>
     <string name="cta_text_color">cta text color</string>
     <string name="cta_text">cta text</string>
@@ -43,6 +45,7 @@
     <string name="enter_your_number">Enter your number</string>
     <string name="proceed">Proceed</string>
     <string name="loading">Loading…</string>
+    <string name="oauth_sdk_demo">OAuth SDK Demo</string>
     <string-array name="SdkPartnerLoginPrefixOptionsArray">
         <item>To get started</item>
         <item>To continue</item>

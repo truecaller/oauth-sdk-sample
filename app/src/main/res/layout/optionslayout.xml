@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:background="@color/white"
+    android:paddingBottom="@dimen/dp32">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -106,6 +107,22 @@
                 android:checked="true"
                 android:tag="offline_access"
                 android:text="@string/offline_access" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/email_access_scope"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:tag="email"
+                android:text="@string/email" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/address_access_scope"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:tag="address"
+                android:text="@string/address" />
 
         </LinearLayout>
 
@@ -212,7 +229,9 @@
             android:id="@+id/buttonGo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
             android:background="#2196F3"
+            android:textColor="@color/white"
             android:foreground="?selectableItemBackground"
             android:text="@string/let_s_go" />
 

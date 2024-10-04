@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#675A5A">
+    android:background="#121E2C">
 
     <ImageView
         android:id="@+id/truecaller_logo"
@@ -32,6 +32,7 @@
             android:layout_gravity="start"
             android:fontFamily="sans-serif-light"
             android:text="@string/enter_your_number"
+            android:textColor="@color/white"
             android:textSize="20sp" />
 
         <LinearLayout
@@ -45,6 +46,7 @@
                 android:layout_weight="0.1"
                 android:paddingTop="16dp"
                 android:text="+91"
+                android:textColor="@color/white"
                 android:textSize="18sp" />
 
             <EditText
@@ -55,7 +57,9 @@
                 android:hint="99XXX99XXX"
                 android:inputType="phone"
                 android:maxLength="10"
-                android:paddingTop="16dp" />
+                android:paddingTop="16dp"
+                android:textColor="@color/white"
+                android:textColorHint="#A8A4A4" />
         </LinearLayout>
     </LinearLayout>
 

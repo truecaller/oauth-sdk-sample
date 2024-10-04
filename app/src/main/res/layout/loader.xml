@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#675A5A"
+    android:background="#121E2C"
     android:orientation="vertical">
 
     <LinearLayout
@@ -19,6 +19,7 @@
             android:layout_gravity="center"
             android:fontFamily="sans-serif-light"
             android:text="@string/loading"
+            android:textColor="@color/white"
             android:textSize="16dp" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -27,11 +28,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
+            android:textColor="@color/white"
             android:visibility="gone"
             tools:text="Retry"
             tools:visibility="visible" />
 
         <ProgressBar
+            android:id="@+id/progress_bar"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_gravity="center_horizontal"

@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121E2C"
     android:padding="10dp"
     tools:context=".ui.login.SignedInActivity">
 
@@ -25,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="#2196F3"
+            android:textColor="@color/white"
             android:foreground="?selectableItemBackground"
             android:padding="10dp"
             android:text="Fetch Access Token" />
@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="#2196F3"
+            android:textColor="@color/white"
             android:foreground="?selectableItemBackground"
             android:padding="10dp"
             android:text="Fetch Profile" />
