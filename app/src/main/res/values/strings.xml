@@ -22,6 +22,9 @@
     <string name="verify">Verify</string>
     <string name="register">Register</string>
     <string name="get_started">Get Started</string>
+    <string name="popup_mode">Popup Mode</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="dismiss_cross_button">Dismiss Cross Button</string>
     <string name="rectangular_button">Rectangular Button Shape</string>
     <string name="request_scopes">Request Scopes</string>
     <string name="profile">Profile</string>
@@ -30,6 +33,7 @@
     <string name="offline_access">Offline Access</string>
     <string name="email">Email</string>
     <string name="address">Address</string>
+    <string name="dismiss_options">Dismiss Options</string>
     <string name="cta_color">cta color</string>
     <string name="cta_text_color">cta text color</string>
     <string name="cta_text">cta text</string>
@@ -69,6 +73,11 @@
         <item>Continue</item>
         <item>Accept</item>
         <item>Confirm</item>
+    </string-array>
+    <string-array name="SdkPartnerDismissOptions">
+        <item>None</item>
+        <item>Cross Button</item>
+        <item>Secondary CTA border</item>
     </string-array>
     <string-array name="SdkPartnerSampleColors">
         <item>#121E2C</item>

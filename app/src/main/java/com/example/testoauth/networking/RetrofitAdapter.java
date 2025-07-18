@@ -23,3 +23,4 @@ public class RetrofitAdapter {
         return retrofitBuilder.build().create(serviceClass);
     }
 }
+
