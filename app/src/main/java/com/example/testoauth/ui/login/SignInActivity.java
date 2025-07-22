@@ -403,7 +403,7 @@ public class SignInActivity extends AppCompatActivity {
                 .footerType(additionalFooterSelector.getCheckedRadioButtonId() == ListView.INVALID_POSITION
                         ? TcSdkOptions.FOOTER_TYPE_SKIP
                         : resolveAdditionalFooter(additionalFooterSelector.getCheckedRadioButtonId()))
-                .consentTitleOption(titleSelector.getCheckedRadioButtonId() == ListView.INVALID_POSITION
+                .consentHeadingOption(titleSelector.getCheckedRadioButtonId() == ListView.INVALID_POSITION
                         ? TcSdkOptions.SDK_CONSENT_HEADING_LOG_IN_TO
                         : resolveSelectedPosition(titleSelector.getCheckedRadioButtonId()))
                 .sdkOptions(((SwitchCompat) findViewById(R.id.sdkOptions)).isChecked() ?
@@ -504,22 +504,6 @@ public class SignInActivity extends AppCompatActivity {
         });
         permissionHandler.requestPermission();
     }
-
-
-    //    val launcher = registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
-//        TcSdk.getInstance()
-//            .onActivityResultObtained(this@MainActivity, result.resultCode, result.data)
-//    }
-
-//    @Override
-//    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        try {
-//            TcSdk.getInstance().onActivityResultObtained(this, requestCode, resultCode, data);
-//        } catch (RuntimeException e) {
-//            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-//        }
-//    }
 
     public void showLoader(String message) {
         showLayout(LOADER_LAYOUT);
