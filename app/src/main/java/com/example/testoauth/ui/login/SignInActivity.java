@@ -346,10 +346,18 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void setSpinnerAdapters() {
-        ArrayAdapter<CharSequence> adapterP =
-                ArrayAdapter.createFromResource(this,R.array.SdkPartnerHeadingOptionsArray
-                        ,
-                        android.R.layout.simple_spinner_item);
+        String[] headingOptions = getResources().getStringArray(R.array.SdkPartnerHeadingOptionsArray);
+        String[] headingOptionsFormated = new String[headingOptions.length];
+        String appName = getString(R.string.app_name);
+        for (int i = 0; i < headingOptionsFormated.length; i++) {
+            headingOptionsFormated[i] = String.format(headingOptions[i], appName);
+        }
+
+        ArrayAdapter<String> adapterP = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                headingOptionsFormated
+        );
         adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         headingSpinner.setAdapter(adapterP);
 
