@@ -12,48 +12,21 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin">
 
-        <RadioGroup
-            android:id="@+id/sdkTitleOptions"
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/popupModeOptions"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:text="@string/popup_mode" />
 
-            <RadioButton
-                android:id="@+id/zero"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/login" />
-
-            <RadioButton
-                android:id="@+id/one"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/signup" />
-
-            <RadioButton
-                android:id="@+id/two"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/signin" />
-
-            <RadioButton
-                android:id="@+id/three"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/verify" />
-
-            <RadioButton
-                android:id="@+id/four"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/register" />
-
-            <RadioButton
-                android:id="@+id/five"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/get_started" />
-        </RadioGroup>
-
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/darkModeOptions"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:text="@string/dark_mode" />
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/shapeOptions"
             android:layout_width="match_parent"
@@ -61,6 +34,17 @@
             android:layout_marginTop="20dp"
             android:layout_weight="1"
             android:text="@string/rectangular_button" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/dismiss_options"
+            android:textSize="12sp" />
+
+        <Spinner
+            android:id="@+id/dismiss_options_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:id="@+id/scopes_layout"
@@ -166,11 +150,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@string/login_info_prefix"
+            android:text="@string/heading_options"
             android:textSize="12sp" />
 
         <Spinner
-            android:id="@+id/prefix_spinner"
+            android:id="@+id/heading_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -223,7 +207,9 @@
             android:id="@+id/localeEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/enter_locale_en" />
+            android:autofillHints="name"
+            android:hint="@string/enter_locale_en"
+            android:inputType="text" />
 
         <Button
             android:id="@+id/buttonGo"

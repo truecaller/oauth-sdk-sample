@@ -17,6 +17,11 @@
 
 package com.example.testoauth.ui.login;
 
+import static com.truecaller.android.sdk.oAuth.TcSdkOptions.CONSENT_MODE_BOTTOMSHEET;
+import static com.truecaller.android.sdk.oAuth.TcSdkOptions.CONSENT_MODE_POPUP;
+import static com.truecaller.android.sdk.oAuth.TcSdkOptions.DISMISS_OPTION_CROSS_BUTTON;
+import static com.truecaller.android.sdk.oAuth.TcSdkOptions.DISMISS_OPTION_SECONDARY_CTA_BORDER;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -38,6 +43,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.SwitchCompat;
+
 import com.example.testoauth.R;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.truecaller.android.sdk.common.TrueException;
@@ -46,6 +59,7 @@ import com.truecaller.android.sdk.common.VerificationDataBundle;
 import com.truecaller.android.sdk.common.callVerification.RequestPermissionHandler;
 import com.truecaller.android.sdk.common.models.TrueProfile;
 import com.truecaller.android.sdk.oAuth.CodeVerifierUtil;
+import com.truecaller.android.sdk.oAuth.OAuthThemeOptions;
 import com.truecaller.android.sdk.oAuth.TcOAuthCallback;
 import com.truecaller.android.sdk.oAuth.TcOAuthData;
 import com.truecaller.android.sdk.oAuth.TcOAuthError;
@@ -60,13 +74,6 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.core.content.ContextCompat;
-
 public class SignInActivity extends AppCompatActivity {
 
     private static final String TAG = "SignInActivity";
@@ -78,11 +85,10 @@ public class SignInActivity extends AppCompatActivity {
     private static final int FORM_LAYOUT     = 4;
     private static final int SETTINGS_LAYOUT = 5;
 
-    private RadioGroup titleSelector;
     private RadioGroup additionalFooterSelector;
     private int        verificationCallbackType;
-    private Spinner    ctaTextSpinner, prefixSpinner;
-    private Spinner colorSpinner, colorTextSpinner;
+    private Spinner    ctaTextSpinner, headingSpinner;
+    private Spinner colorSpinner, colorTextSpinner, dismissOptionsSpinner;
     private AppCompatTextView timerTextViewMissedCall;
     private ProgressBar       progressBar;
     private MaterialCheckBox  phoneCheckbox, profileCheckbox, openIdCheckbox, offlineAccessCheckbox, emailCheckbox, addressCheckbox;
@@ -230,6 +236,10 @@ public class SignInActivity extends AppCompatActivity {
         }
     };
 
+    ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> TcSdk.getInstance()
+                    .onActivityResultObtained(SignInActivity.this, result.getResultCode(), result.getData()));
+
     private final View.OnClickListener startClickListener = view -> {
         try {
             if (TcSdk.getInstance().isOAuthFlowUsable()) {
@@ -251,7 +261,11 @@ public class SignInActivity extends AppCompatActivity {
                 state = UUID.randomUUID().toString();
                 TcSdk.getInstance().setOAuthState(state);
                 TcSdk.getInstance().setOAuthScopes(getRequestedScopes());
-                TcSdk.getInstance().getAuthorizationCode(SignInActivity.this);
+                TcSdk.getInstance().setTheme(((SwitchCompat) findViewById(R.id.darkModeOptions)).isChecked() ?
+                        OAuthThemeOptions.DARK
+                        : OAuthThemeOptions.LIGHT);
+                TcSdk.getInstance().getAuthorizationCode(SignInActivity.this, launcher);
+              //  TcSdk.getInstance().getAuthorizationCode(SignInActivity.this);
             } else {
                 Toast.makeText(this, "OAuth flow not usable", Toast.LENGTH_SHORT).show();
             }
@@ -308,13 +322,13 @@ public class SignInActivity extends AppCompatActivity {
 
         findViewById(R.id.btnStart).setOnClickListener(startClickListener);
         findViewById(R.id.buttonGo).setOnClickListener(btnGoClickListner);
-        titleSelector = findViewById(R.id.sdkTitleOptions);
         additionalFooterSelector = findViewById(R.id.additionalFooters);
 
+        dismissOptionsSpinner = findViewById(R.id.dismiss_options_spinner);
         colorSpinner = findViewById(R.id.color_spinner);
         colorTextSpinner = findViewById(R.id.color_text_spinner);
         ctaTextSpinner = findViewById(R.id.cta_prefix_spinner);
-        prefixSpinner = findViewById(R.id.prefix_spinner);
+        headingSpinner = findViewById(R.id.heading_spinner);
 
         findViewById(R.id.scopes_layout).setVisibility(View.VISIBLE);
         phoneCheckbox = findViewById(R.id.phone_scope);
@@ -328,17 +342,24 @@ public class SignInActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar);
         setSpinnerAdapters();
 
-        //        initTruecallerSDK();
         showLayout(SETTINGS_LAYOUT);
     }
 
     private void setSpinnerAdapters() {
-        ArrayAdapter<CharSequence> adapterP =
-                ArrayAdapter.createFromResource(this,
-                        R.array.SdkPartnerLoginPrefixOptionsArray,
-                        android.R.layout.simple_spinner_item);
+        String[] headingOptions = getResources().getStringArray(R.array.SdkPartnerHeadingOptionsArray);
+        String[] headingOptionsFormated = new String[headingOptions.length];
+        String appName = getString(R.string.app_name);
+        for (int i = 0; i < headingOptionsFormated.length; i++) {
+            headingOptionsFormated[i] = String.format(headingOptions[i], appName);
+        }
+
+        ArrayAdapter<String> adapterP = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                headingOptionsFormated
+        );
         adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        prefixSpinner.setAdapter(adapterP);
+        headingSpinner.setAdapter(adapterP);
 
         ArrayAdapter<CharSequence> adapterCP =
                 ArrayAdapter.createFromResource(this,
@@ -352,38 +373,56 @@ public class SignInActivity extends AppCompatActivity {
                         R.array.SdkPartnerSampleColors,
                         android.R.layout.simple_spinner_item);
         adapterColor.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        ArrayAdapter<CharSequence> adapterDismissOptions =
+                ArrayAdapter.createFromResource(this,
+                        R.array.SdkPartnerDismissOptions,
+                        android.R.layout.simple_spinner_item);
+        adapterDismissOptions.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        dismissOptionsSpinner.setAdapter(adapterDismissOptions);
         colorSpinner.setAdapter(adapterColor);
         colorTextSpinner.setAdapter(adapterColor);
 
-        prefixSpinner.setSelection(1);
+        headingSpinner.setSelection(0);
         ctaTextSpinner.setSelection(0);
         colorSpinner.setSelection(0);
         colorTextSpinner.setSelection(1);
+        dismissOptionsSpinner.setSelection(0);
     }
 
     private void initTruecallerSDK() {
         // clear any existing instance before initializing a new one
         TcSdk.clear();
-        TcSdkOptions trueScope = new TcSdkOptions.Builder(this, sdkCallback)
+        TcSdkOptions.Builder trueScopeBuilder = new TcSdkOptions.Builder(this, sdkCallback)
                 .buttonColor(Color.parseColor(colorSpinner.getSelectedItem().toString())) //default TC blue
                 .buttonTextColor(Color.parseColor(colorTextSpinner.getSelectedItem().toString())) //default white
-                .loginTextPrefix(prefixSpinner.getSelectedItemPosition()) //default 0
+                .consentHeadingOption(headingSpinner.getSelectedItemPosition()) //default 0
                 .ctaText(ctaTextSpinner.getSelectedItemPosition()) //default 0
+                .consentMode(((SwitchCompat) findViewById(R.id.popupModeOptions)).isChecked() ?
+                        CONSENT_MODE_POPUP
+                        : CONSENT_MODE_BOTTOMSHEET)
                 .buttonShapeOptions(((SwitchCompat) findViewById(R.id.shapeOptions)).isChecked() ?
                         TcSdkOptions.BUTTON_SHAPE_RECTANGLE
                         : TcSdkOptions.BUTTON_SHAPE_ROUNDED) //default ROUNDED
                 .footerType(additionalFooterSelector.getCheckedRadioButtonId() == ListView.INVALID_POSITION
                         ? TcSdkOptions.FOOTER_TYPE_SKIP
                         : resolveAdditionalFooter(additionalFooterSelector.getCheckedRadioButtonId()))
-                .consentTitleOption(titleSelector.getCheckedRadioButtonId() == ListView.INVALID_POSITION
-                        ? TcSdkOptions.SDK_CONSENT_HEADING_LOG_IN_TO
-                        : resolveSelectedPosition(titleSelector.getCheckedRadioButtonId()))
                 .sdkOptions(((SwitchCompat) findViewById(R.id.sdkOptions)).isChecked() ?
                         TcSdkOptions.OPTION_VERIFY_ALL_USERS :
-                        TcSdkOptions.OPTION_VERIFY_ONLY_TC_USERS)
-                .build();
+                        TcSdkOptions.OPTION_VERIFY_ONLY_TC_USERS);
+        if (dismissOptionsSpinner.getSelectedItemPosition() != 0) {
+            trueScopeBuilder.dismissOptions(getDismissOptions(dismissOptionsSpinner.getSelectedItemPosition()));
+        }
 
-        new Thread(() -> TcSdk.init(trueScope)).start();
+        new Thread(() -> TcSdk.init(trueScopeBuilder.build())).start();
+    }
+
+    private int getDismissOptions(int selectedItemPosition) {
+        if (selectedItemPosition == 1) {
+            return DISMISS_OPTION_CROSS_BUTTON;
+        }
+        return DISMISS_OPTION_SECONDARY_CTA_BORDER;
     }
 
     private int resolveAdditionalFooter(final int checkedRadioButtonId) {
@@ -397,26 +436,6 @@ public class SignInActivity extends AppCompatActivity {
             return TcSdkOptions.FOOTER_TYPE_LATER;
         }
         return TcSdkOptions.FOOTER_TYPE_SKIP;
-    }
-
-    private int resolveSelectedPosition(final int checkedRadioButtonId) {
-        int pos;
-        if (checkedRadioButtonId == R.id.zero) {
-            pos = 0;
-        } else if (checkedRadioButtonId == R.id.one) {
-            pos = 1;
-        } else if (checkedRadioButtonId == R.id.two) {
-            pos = 2;
-        } else if (checkedRadioButtonId == R.id.three) {
-            pos = 3;
-        } else if (checkedRadioButtonId == R.id.four) {
-            pos = 4;
-        } else if (checkedRadioButtonId == R.id.five) {
-            pos = 5;
-        } else {
-            pos = 0;
-        }
-        return pos;
     }
 
     private void fillOtp(final String otp) {
@@ -466,16 +485,6 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
         permissionHandler.requestPermission();
-    }
-
-    @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        try {
-            TcSdk.getInstance().onActivityResultObtained(this, requestCode, resultCode, data);
-        } catch (RuntimeException e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
     }
 
     public void showLoader(String message) {
