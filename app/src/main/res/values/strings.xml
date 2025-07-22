@@ -37,7 +37,7 @@
     <string name="cta_color">cta color</string>
     <string name="cta_text_color">cta text color</string>
     <string name="cta_text">cta text</string>
-    <string name="login_info_prefix">login info prefix</string>
+    <string name="heading_options">Heading Options</string>
     <string name="skip">Skip</string>
     <string name="use_another_number_uan">Use Another Number (UAN)</string>
     <string name="use_another_method">Use Another Method</string>
@@ -50,23 +50,32 @@
     <string name="proceed">Proceed</string>
     <string name="loading">Loading…</string>
     <string name="oauth_sdk_demo">OAuth SDK Demo</string>
-    <string-array name="SdkPartnerLoginPrefixOptionsArray">
-        <item>To get started</item>
-        <item>To continue</item>
-        <item>To place order</item>
-        <item>To complete your purchase</item>
-        <item>To checkout</item>
-        <item>To complete your booking</item>
-        <item>To proceed with your booking</item>
-        <item>To continue with your booking</item>
-        <item>To get details</item>
-        <item>To view more</item>
-        <item>To continue reading</item>
-        <item>To proceed</item>
-        <item>For new updates</item>
-        <item>To get updates</item>
-        <item>To subscribe</item>
-        <item>To subscribe &amp; get updates</item>
+    <string-array name="SdkPartnerHeadingOptionsArray">
+        <item>Login to Test OAuth</item>
+        <item>Signup with Test OAuth</item>
+        <item>Sign In to Test OAuth</item>
+        <item>Verify number with Test OAuth</item>
+        <item>Register with Test OAuth</item>
+        <item>Get Started with Test OAuth</item>
+        <item>Proceed with Test OAuth</item>
+        <item>Verify with Test OAuth</item>
+        <item>Verify profile with Test OAuth</item>
+        <item>Verify your profile with Test OAuth</item>
+        <item>Verify phone number with Test OAuth</item>
+        <item>Verify your number with Test OAuth</item>
+        <item>Continue with Test OAuth</item>
+        <item>Complete order with Test OAuth</item>
+        <item>Place order with Test OAuth</item>
+        <item>Complete booking with Test OAuth</item>
+        <item>Checkout with Test OAuth</item>
+        <item>Manage details with Test OAuth</item>
+        <item>Manage your details with Test OAuth</item>
+        <item>Login to Test OAuth with one tap</item>
+        <item>Subscribe to Test OAuth</item>
+        <item>Get updates from Test OAuth</item>
+        <item>Continue reading on Test OAuth</item>
+        <item>Get new updates from Test OAuth</item>
+        <item>Login/Signup with Test OAuth</item>
     </string-array>
     <string-array name="SdkPartnerCTAOptionsArray">
         <item>Proceed</item>

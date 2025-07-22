@@ -12,48 +12,6 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin">
 
-        <RadioGroup
-            android:id="@+id/sdkTitleOptions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                android:id="@+id/zero"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/login" />
-
-            <RadioButton
-                android:id="@+id/one"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/signup" />
-
-            <RadioButton
-                android:id="@+id/two"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/signin" />
-
-            <RadioButton
-                android:id="@+id/three"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/verify" />
-
-            <RadioButton
-                android:id="@+id/four"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/register" />
-
-            <RadioButton
-                android:id="@+id/five"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/get_started" />
-        </RadioGroup>
-
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/popupModeOptions"
             android:layout_width="match_parent"
@@ -192,11 +150,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@string/login_info_prefix"
+            android:text="@string/heading_options"
             android:textSize="12sp" />
 
         <Spinner
-            android:id="@+id/prefix_spinner"
+            android:id="@+id/heading_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

@@ -85,10 +85,9 @@ public class SignInActivity extends AppCompatActivity {
     private static final int FORM_LAYOUT     = 4;
     private static final int SETTINGS_LAYOUT = 5;
 
-    private RadioGroup titleSelector;
     private RadioGroup additionalFooterSelector;
     private int        verificationCallbackType;
-    private Spinner    ctaTextSpinner, prefixSpinner;
+    private Spinner    ctaTextSpinner, headingSpinner;
     private Spinner colorSpinner, colorTextSpinner, dismissOptionsSpinner;
     private AppCompatTextView timerTextViewMissedCall;
     private ProgressBar       progressBar;
@@ -323,14 +322,13 @@ public class SignInActivity extends AppCompatActivity {
 
         findViewById(R.id.btnStart).setOnClickListener(startClickListener);
         findViewById(R.id.buttonGo).setOnClickListener(btnGoClickListner);
-        titleSelector = findViewById(R.id.sdkTitleOptions);
         additionalFooterSelector = findViewById(R.id.additionalFooters);
 
         dismissOptionsSpinner = findViewById(R.id.dismiss_options_spinner);
         colorSpinner = findViewById(R.id.color_spinner);
         colorTextSpinner = findViewById(R.id.color_text_spinner);
         ctaTextSpinner = findViewById(R.id.cta_prefix_spinner);
-        prefixSpinner = findViewById(R.id.prefix_spinner);
+        headingSpinner = findViewById(R.id.heading_spinner);
 
         findViewById(R.id.scopes_layout).setVisibility(View.VISIBLE);
         phoneCheckbox = findViewById(R.id.phone_scope);
@@ -344,17 +342,16 @@ public class SignInActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar);
         setSpinnerAdapters();
 
-        //        initTruecallerSDK();
         showLayout(SETTINGS_LAYOUT);
     }
 
     private void setSpinnerAdapters() {
         ArrayAdapter<CharSequence> adapterP =
-                ArrayAdapter.createFromResource(this,
-                        R.array.SdkPartnerLoginPrefixOptionsArray,
+                ArrayAdapter.createFromResource(this,R.array.SdkPartnerHeadingOptionsArray
+                        ,
                         android.R.layout.simple_spinner_item);
         adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        prefixSpinner.setAdapter(adapterP);
+        headingSpinner.setAdapter(adapterP);
 
         ArrayAdapter<CharSequence> adapterCP =
                 ArrayAdapter.createFromResource(this,
@@ -379,7 +376,7 @@ public class SignInActivity extends AppCompatActivity {
         colorSpinner.setAdapter(adapterColor);
         colorTextSpinner.setAdapter(adapterColor);
 
-        prefixSpinner.setSelection(1);
+        headingSpinner.setSelection(0);
         ctaTextSpinner.setSelection(0);
         colorSpinner.setSelection(0);
         colorTextSpinner.setSelection(1);
@@ -392,7 +389,7 @@ public class SignInActivity extends AppCompatActivity {
         TcSdkOptions.Builder trueScopeBuilder = new TcSdkOptions.Builder(this, sdkCallback)
                 .buttonColor(Color.parseColor(colorSpinner.getSelectedItem().toString())) //default TC blue
                 .buttonTextColor(Color.parseColor(colorTextSpinner.getSelectedItem().toString())) //default white
-                .loginTextPrefix(prefixSpinner.getSelectedItemPosition()) //default 0
+                .consentHeadingOption(headingSpinner.getSelectedItemPosition()) //default 0
                 .ctaText(ctaTextSpinner.getSelectedItemPosition()) //default 0
                 .consentMode(((SwitchCompat) findViewById(R.id.popupModeOptions)).isChecked() ?
                         CONSENT_MODE_POPUP
@@ -403,9 +400,6 @@ public class SignInActivity extends AppCompatActivity {
                 .footerType(additionalFooterSelector.getCheckedRadioButtonId() == ListView.INVALID_POSITION
                         ? TcSdkOptions.FOOTER_TYPE_SKIP
                         : resolveAdditionalFooter(additionalFooterSelector.getCheckedRadioButtonId()))
-                .consentHeadingOption(titleSelector.getCheckedRadioButtonId() == ListView.INVALID_POSITION
-                        ? TcSdkOptions.SDK_CONSENT_HEADING_LOG_IN_TO
-                        : resolveSelectedPosition(titleSelector.getCheckedRadioButtonId()))
                 .sdkOptions(((SwitchCompat) findViewById(R.id.sdkOptions)).isChecked() ?
                         TcSdkOptions.OPTION_VERIFY_ALL_USERS :
                         TcSdkOptions.OPTION_VERIFY_ONLY_TC_USERS);
@@ -434,26 +428,6 @@ public class SignInActivity extends AppCompatActivity {
             return TcSdkOptions.FOOTER_TYPE_LATER;
         }
         return TcSdkOptions.FOOTER_TYPE_SKIP;
-    }
-
-    private int resolveSelectedPosition(final int checkedRadioButtonId) {
-        int pos;
-        if (checkedRadioButtonId == R.id.zero) {
-            pos = 0;
-        } else if (checkedRadioButtonId == R.id.one) {
-            pos = 1;
-        } else if (checkedRadioButtonId == R.id.two) {
-            pos = 2;
-        } else if (checkedRadioButtonId == R.id.three) {
-            pos = 3;
-        } else if (checkedRadioButtonId == R.id.four) {
-            pos = 4;
-        } else if (checkedRadioButtonId == R.id.five) {
-            pos = 5;
-        } else {
-            pos = 0;
-        }
-        return pos;
     }
 
     private void fillOtp(final String otp) {
