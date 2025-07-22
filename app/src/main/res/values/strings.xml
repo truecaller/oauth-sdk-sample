@@ -51,31 +51,31 @@
     <string name="loading">Loading…</string>
     <string name="oauth_sdk_demo">OAuth SDK Demo</string>
     <string-array name="SdkPartnerHeadingOptionsArray">
-        <item>Login to Test OAuth</item>
-        <item>Signup with Test OAuth</item>
-        <item>Sign In to Test OAuth</item>
-        <item>Verify number with Test OAuth</item>
-        <item>Register with Test OAuth</item>
-        <item>Get Started with Test OAuth</item>
-        <item>Proceed with Test OAuth</item>
-        <item>Verify with Test OAuth</item>
-        <item>Verify profile with Test OAuth</item>
-        <item>Verify your profile with Test OAuth</item>
-        <item>Verify phone number with Test OAuth</item>
-        <item>Verify your number with Test OAuth</item>
-        <item>Continue with Test OAuth</item>
-        <item>Complete order with Test OAuth</item>
-        <item>Place order with Test OAuth</item>
-        <item>Complete booking with Test OAuth</item>
-        <item>Checkout with Test OAuth</item>
-        <item>Manage details with Test OAuth</item>
-        <item>Manage your details with Test OAuth</item>
-        <item>Login to Test OAuth with one tap</item>
-        <item>Subscribe to Test OAuth</item>
-        <item>Get updates from Test OAuth</item>
-        <item>Continue reading on Test OAuth</item>
-        <item>Get new updates from Test OAuth</item>
-        <item>Login/Signup with Test OAuth</item>
+        <item>Login to %s</item>
+        <item>Signup with %s</item>
+        <item>Sign In to %s</item>
+        <item>Verify number with %s</item>
+        <item>Register with %s</item>
+        <item>Get Started with %s</item>
+        <item>Proceed with %s</item>
+        <item>Verify with %s</item>
+        <item>Verify profile with %s</item>
+        <item>Verify your profile with %s</item>
+        <item>Verify phone number with %s</item>
+        <item>Verify your number with %s</item>
+        <item>Continue with %s</item>
+        <item>Complete order with %s</item>
+        <item>Place order with %s</item>
+        <item>Complete booking with %s</item>
+        <item>Checkout with %s</item>
+        <item>Manage details with %s</item>
+        <item>Manage your details with %s</item>
+        <item>Login to %s with one tap</item>
+        <item>Subscribe to %s</item>
+        <item>Get updates from %s</item>
+        <item>Continue reading on %s</item>
+        <item>Get new updates from %s</item>
+        <item>Login/Signup with %s</item>
     </string-array>
     <string-array name="SdkPartnerCTAOptionsArray">
         <item>Proceed</item>
