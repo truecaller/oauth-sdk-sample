@@ -42,7 +42,9 @@ public class SignedInActivity extends Activity {
         binding.accessTokenBtn.setOnClickListener(view -> fetchAccessToken(oAuthData, codeVerifier));
         binding.signedInTv.setText(String.format(getString(R.string.large_text),
                 oAuthData.getAuthorizationCode(), codeVerifier,
-                oAuthData.getState(), requestedState, oAuthData.getScopesGranted()));
+                oAuthData.getState(), requestedState, oAuthData.getScopesGranted(),
+                oAuthData.getSimState() + "", oAuthData.getDeviceCode()
+        ));
         createRetrofitService();
     }
 

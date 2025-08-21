@@ -52,7 +52,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.10.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
-    implementation("com.truecaller.android.sdk:truecaller-sdk:3.2.0")
+    implementation("com.truecaller.android.sdk:truecaller-sdk:3.2.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
