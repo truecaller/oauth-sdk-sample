@@ -11,6 +11,8 @@
         State is %3$s\n\n
         Requested State is %4$s\n\n
         Scopes granted are %5$s\n\n
+        Sim State is %6$s\n\n
+        Device Code is %7$s\n\n
         --------------------------------------------------------------->>>
     </string>
     <string name="access_token">Access Token is %s</string>
