@@ -425,7 +425,7 @@ public class SignInActivity extends AppCompatActivity {
         if (dismissOptionsSpinner.getSelectedItemPosition() != 0) {
             trueScopeBuilder.dismissOptions(getDismissOptions(dismissOptionsSpinner.getSelectedItemPosition()));
         }
-        if(!((SwitchCompat) findViewById(R.id.neverCallEnhancedBtmSheetEnabled)).isChecked()) {
+        if (!((SwitchCompat) findViewById(R.id.neverCallEnhancedBtmSheetEnabled)).isChecked()) {
             trueScopeBuilder.setEnhancedBottomSheet(((SwitchCompat) findViewById(R.id.enhancedBtmSheetEnabled)).isChecked());
         }
         TcSdk.initAsync(trueScopeBuilder.build());
