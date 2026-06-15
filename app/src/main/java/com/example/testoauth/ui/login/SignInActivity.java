@@ -317,7 +317,7 @@ public class SignInActivity extends AppCompatActivity {
     @SuppressLint("NewApi")
     private final View.OnClickListener btnGoClickListner = v -> {
         initTruecallerSDK();
-        showLoader("SDK..init");
+        showLoader(getString(R.string.init_sdk_loader_message));
     };
 
     @Override
