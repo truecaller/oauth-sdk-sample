@@ -100,6 +100,45 @@ public class SignInActivity extends AppCompatActivity {
 
     private final TcOAuthCallback sdkCallback = new TcOAuthCallback() {
         @Override
+        public void onSdkReady() {
+            showLayout(LANDING_LAYOUT);
+            try {
+                if (TcSdk.getInstance().isOAuthFlowUsable()) {
+                    EditText localeEt = findViewById(R.id.localeEt);
+                    String locale = null;
+                    if (!TextUtils.isEmpty(localeEt.getText())) {
+                        locale = localeEt.getText().toString();
+                    }
+                    if (!StringUtils.isEmpty(locale)) {
+                        TcSdk.getInstance().setLocale(new Locale(locale));
+                    }
+                    codeVerifier = CodeVerifierUtil.Companion.generateRandomCodeVerifier();
+                    String codeChallenge = CodeVerifierUtil.Companion.getCodeChallenge(codeVerifier);
+                    if (codeChallenge != null) {
+                        TcSdk.getInstance().setCodeChallenge(codeChallenge);
+                    } else {
+                        Toast.makeText(SignInActivity.this, "code challenge is required", Toast.LENGTH_SHORT).show();
+                    }
+                    state = UUID.randomUUID().toString();
+                    TcSdk.getInstance().setOAuthState(state);
+                    TcSdk.getInstance().setOAuthScopes(getRequestedScopes());
+                    TcSdk.getInstance().setTheme(((SwitchCompat) findViewById(R.id.darkModeOptions)).isChecked() ?
+                            OAuthThemeOptions.DARK
+                            : OAuthThemeOptions.LIGHT);
+                    TcSdk.getInstance().getAuthorizationCode(SignInActivity.this, launcher);
+                    //  TcSdk.getInstance().getAuthorizationCode(SignInActivity.this);
+                } else {
+                    Toast.makeText(SignInActivity.this, "OAuth flow not usable", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+                // If you receive an exception "Please call init() on TcSdk first", it means either you haven't initialized the SDK
+                // or you have but since it has been initialized in a background thread, so you need to wait. In ideal scenario this shouldn't happen
+                // since you would be initializing the SDK well in advance before calling its methods.
+                Toast.makeText(SignInActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
         public void onSuccess(@NonNull final TcOAuthData oAuthData) {
             Log.i(TAG, "\ncode: " + oAuthData.getAuthorizationCode() + "\nverifier: " + codeVerifier);
             Toast.makeText(SignInActivity.this,
@@ -241,40 +280,7 @@ public class SignInActivity extends AppCompatActivity {
                     .onActivityResultObtained(SignInActivity.this, result.getResultCode(), result.getData()));
 
     private final View.OnClickListener startClickListener = view -> {
-        try {
-            if (TcSdk.getInstance().isOAuthFlowUsable()) {
-                EditText localeEt = findViewById(R.id.localeEt);
-                String locale = null;
-                if (!TextUtils.isEmpty(localeEt.getText())) {
-                    locale = localeEt.getText().toString();
-                }
-                if (!StringUtils.isEmpty(locale)) {
-                    TcSdk.getInstance().setLocale(new Locale(locale));
-                }
-                codeVerifier = CodeVerifierUtil.Companion.generateRandomCodeVerifier();
-                String codeChallenge = CodeVerifierUtil.Companion.getCodeChallenge(codeVerifier);
-                if (codeChallenge != null) {
-                    TcSdk.getInstance().setCodeChallenge(codeChallenge);
-                } else {
-                    Toast.makeText(this, "code challenge is required", Toast.LENGTH_SHORT).show();
-                }
-                state = UUID.randomUUID().toString();
-                TcSdk.getInstance().setOAuthState(state);
-                TcSdk.getInstance().setOAuthScopes(getRequestedScopes());
-                TcSdk.getInstance().setTheme(((SwitchCompat) findViewById(R.id.darkModeOptions)).isChecked() ?
-                        OAuthThemeOptions.DARK
-                        : OAuthThemeOptions.LIGHT);
-                TcSdk.getInstance().getAuthorizationCode(SignInActivity.this, launcher);
-              //  TcSdk.getInstance().getAuthorizationCode(SignInActivity.this);
-            } else {
-                Toast.makeText(this, "OAuth flow not usable", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            // If you receive an exception "Please call init() on TcSdk first", it means either you haven't initialized the SDK
-            // or you have but since it has been initialized in a background thread, so you need to wait. In ideal scenario this shouldn't happen
-            // since you would be initializing the SDK well in advance before calling its methods.
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+
     };
 
     private String[] getRequestedScopes() {
@@ -308,7 +314,7 @@ public class SignInActivity extends AppCompatActivity {
     @SuppressLint("NewApi")
     private final View.OnClickListener btnGoClickListner = v -> {
         initTruecallerSDK();
-        showLayout(LANDING_LAYOUT);
+        showLoader("SDK..init");
     };
 
     @Override
@@ -414,8 +420,10 @@ public class SignInActivity extends AppCompatActivity {
         if (dismissOptionsSpinner.getSelectedItemPosition() != 0) {
             trueScopeBuilder.dismissOptions(getDismissOptions(dismissOptionsSpinner.getSelectedItemPosition()));
         }
-
-        new Thread(() -> TcSdk.init(trueScopeBuilder.build())).start();
+        if(!((SwitchCompat) findViewById(R.id.neverCallEnhancedBtmSheetEnabled)).isChecked()) {
+            trueScopeBuilder.setEnhancedBottomSheet(((SwitchCompat) findViewById(R.id.enhancedBtmSheetEnabled)).isChecked());
+        }
+        TcSdk.initAsync(trueScopeBuilder.build());
     }
 
     private int getDismissOptions(int selectedItemPosition) {
