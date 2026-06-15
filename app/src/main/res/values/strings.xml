@@ -25,8 +25,8 @@
     <string name="register">Register</string>
     <string name="get_started">Get Started</string>
     <string name="popup_mode">Popup Mode</string>
-    <string name="enhanced_bottom_sheet">Enhanced Bottom sheet</string>
-    <string name="never_call_enhanced_bottom_sheet_enabled">Never Call Set Enhanced Bottom sheet enabled</string>
+    <string name="enhanced_bottom_sheet">Enhanced Bottom Sheet</string>
+    <string name="never_call_enhanced_bottom_sheet_enabled">Never call setEnhancedBottomSheet()</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="dismiss_cross_button">Dismiss Cross Button</string>
     <string name="rectangular_button">Rectangular Button Shape</string>
